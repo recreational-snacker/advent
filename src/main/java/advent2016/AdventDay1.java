@@ -1,4 +1,4 @@
-package advent2016.day1;
+package advent2016;
 
 import java.awt.*;
 import java.util.HashSet;

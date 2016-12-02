@@ -1,4 +1,4 @@
-package advent2016.day1;
+package advent2016;
 
 /**
  * Created by Deesha Singh on 2016/12/02.

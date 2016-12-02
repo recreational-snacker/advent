@@ -1,5 +1,6 @@
-package advent2015.day1;
+package advent2015;
 
+import advent2015.AdventDay2;
 import org.junit.Test;
 
 /**

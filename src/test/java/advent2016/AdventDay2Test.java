@@ -1,9 +1,8 @@
-package advent2016.day1;
+package advent2016;
 
+import advent2016.AdventDay2;
 import org.junit.Assert;
 import org.junit.Test;
-
-import static org.junit.Assert.*;
 
 /**
  * Created by Deesha Singh on 2016/12/02.

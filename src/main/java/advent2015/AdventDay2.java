@@ -1,4 +1,4 @@
-package advent2015.day1;
+package advent2015;
 
 import java.util.Arrays;
 
