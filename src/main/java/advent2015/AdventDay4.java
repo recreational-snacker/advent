@@ -12,7 +12,7 @@ public class AdventDay4 {
     private final static String MD5 = "MD5";
 
     public static String solution(String input, String matcher) {
-        String md5 = null;
+        String md5;
         for (int i = 0; ; i++) {
             String attempt = input+i;
             md5 = createMd5(attempt);
@@ -23,7 +23,7 @@ public class AdventDay4 {
     }
 
     public static String createMd5(String input) {
-        String md5 = null;
+        String md5;
         if(null == input) return null;
         try {
             MessageDigest digest = MessageDigest.getInstance(MD5);
