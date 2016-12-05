@@ -34,7 +34,7 @@ public class AdventDay5 {
                 }
             }
             if (stop(password2)) {
-                System.out.println(password);
+                System.out.println("Password for Solution1: "+password);
                 break;
             }
         }
@@ -63,7 +63,7 @@ public class AdventDay5 {
             String value = (String) entry.getValue();
             password += value;
         }
-        System.out.println("Password for Solution1: "+password);
+        System.out.println(password);
     }
 
 
