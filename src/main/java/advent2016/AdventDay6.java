@@ -1,6 +1,11 @@
 package advent2016;
 
-import java.util.*;
+import util.MapUtil;
+
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by Deesha Singh on 2016/12/06.
@@ -20,7 +25,7 @@ public class AdventDay6 {
                     countLetters.put(word[j], 1);
                 }
             }
-            countLetters = sortByValue(countLetters, lessOrMore);
+            countLetters = MapUtil.sortByValue(countLetters, lessOrMore);
             Set s = countLetters.entrySet();
             Iterator it = s.iterator();
             while ( it.hasNext() ) {
@@ -35,19 +40,5 @@ public class AdventDay6 {
         return code;
     }
 
-    public static <K, V extends Comparable<? super V>> Map<K, V> sortByValue(Map<K, V> map, String direction) {
-        List<Map.Entry<K, V>> list = new LinkedList<>(map.entrySet());
-        Collections.sort(list, (o1, o2) -> {
-            if (direction.equals("<")) {
-                return (o1.getValue()).compareTo(o2.getValue());
-            } else {
-                return (o2.getValue()).compareTo(o1.getValue());
-            }
-        });
-        Map<K, V> result = new LinkedHashMap<>();
-        for (Map.Entry<K, V> entry : list) {
-            result.put(entry.getKey(), entry.getValue());
-        }
-        return result;
-    }
+
 }

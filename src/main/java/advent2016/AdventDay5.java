@@ -1,9 +1,14 @@
 package advent2016;
 
+import util.MapUtil;
+
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by DeeshaSingh on 2016-12-05.
@@ -29,7 +34,7 @@ public class AdventDay5 {
                 if (foundValue!=null) {
                     if (password2.get(foundValue).equalsIgnoreCase("_")) {
                         password2.put(foundValue, String.valueOf(md5.charAt(6)));
-                        printMap(password2);
+                        MapUtil.printMap(password2);
                     }
                 }
             }
@@ -53,20 +58,6 @@ public class AdventDay5 {
         return true;
     }
 
-    private static void printMap(Map<Integer, String> password2) {
-        Map<Integer, String> treeMap = new TreeMap<>(password2);
-        Set s = treeMap.entrySet();
-        Iterator it = s.iterator();
-        String password = "";
-        while ( it.hasNext() ) {
-            Map.Entry entry = (Map.Entry) it.next();
-            String value = (String) entry.getValue();
-            password += value;
-        }
-        System.out.println(password);
-    }
-
-
     private static Map<Integer, String> setupMap() {
         Map<Integer, String> map = new HashMap<>();
         map.put(0,"_");
@@ -77,7 +68,7 @@ public class AdventDay5 {
         map.put(5,"_");
         map.put(6,"_");
         map.put(7,"_");
-        printMap(map);
+        MapUtil.printMap(map);
         return map;
     }
 
