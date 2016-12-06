@@ -27,17 +27,17 @@ public class AdventDay6Test {
                 "vrdear\n" +
                 "dvrsen\n" +
                 "enarar";
-        AdventDay6.solution1(6, testInput, ">");
+        AdventDay6.solution1(testInput, ">");
     }
 
     @Test
     public void testSolution1() {
-       AdventDay6.solution1(8, fullInput, ">");
+       AdventDay6.solution1(fullInput, ">");
     }
 
     @Test
     public void testSolution2() {
-        AdventDay6.solution1(8, fullInput, "<");
+        AdventDay6.solution1(fullInput, "<");
     }
 
     String fullInput = "hgxcejbh\n" +

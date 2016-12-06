@@ -6,11 +6,11 @@ import java.util.*;
  * Created by Deesha Singh on 2016/12/06.
  */
 public class AdventDay6 {
-    public static String solution1(Integer no, String input, String lessOrMore) {
+    public static String solution1(String input, String lessOrMore) {
         String[] array = input.split("\n");
         String code = "";
         Map<String, Integer> countLetters = new HashMap<>();
-        for (int j = 0; j<no; j++) {
+        for (int j = 0; j<array[0].length(); j++) {
             for (int i = 0; i < array.length; i++) {
                 String[] word = array[i].split("");
                 if (countLetters.containsKey(word[j])) {
@@ -20,11 +20,7 @@ public class AdventDay6 {
                     countLetters.put(word[j], 1);
                 }
             }
-            if (lessOrMore.equalsIgnoreCase(">")) {
-                countLetters = sortByValue(countLetters);
-            } else {
-                countLetters = sortByValueLeast(countLetters);
-            }
+            countLetters = sortByValue(countLetters, lessOrMore);
             Set s = countLetters.entrySet();
             Iterator it = s.iterator();
             while ( it.hasNext() ) {
@@ -33,55 +29,25 @@ public class AdventDay6 {
                 code += value;
                 break;
             }
-            System.out.println(code);
             countLetters.clear();
         }
-        printMap(countLetters);
-        return "";
+        System.out.println(code);
+        return code;
     }
 
-    public static <K, V extends Comparable<? super V>> Map<K, V> sortByValue(Map<K, V> map) {
-        List<Map.Entry<K, V>> list =
-                new LinkedList<Map.Entry<K, V>>(map.entrySet());
-        Collections.sort(list, new Comparator<Map.Entry<K, V>>() {
-            public int compare(Map.Entry<K, V> o1, Map.Entry<K, V> o2) {
+    public static <K, V extends Comparable<? super V>> Map<K, V> sortByValue(Map<K, V> map, String direction) {
+        List<Map.Entry<K, V>> list = new LinkedList<>(map.entrySet());
+        Collections.sort(list, (o1, o2) -> {
+            if (direction.equals("<")) {
+                return (o1.getValue()).compareTo(o2.getValue());
+            } else {
                 return (o2.getValue()).compareTo(o1.getValue());
             }
         });
-
-        Map<K, V> result = new LinkedHashMap<K, V>();
+        Map<K, V> result = new LinkedHashMap<>();
         for (Map.Entry<K, V> entry : list) {
             result.put(entry.getKey(), entry.getValue());
         }
         return result;
-    }
-
-    public static <K, V extends Comparable<? super V>> Map<K, V> sortByValueLeast(Map<K, V> map) {
-        List<Map.Entry<K, V>> list =
-                new LinkedList<Map.Entry<K, V>>(map.entrySet());
-        Collections.sort(list, new Comparator<Map.Entry<K, V>>() {
-            public int compare(Map.Entry<K, V> o1, Map.Entry<K, V> o2) {
-                return (o1.getValue()).compareTo(o2.getValue());
-            }
-        });
-
-        Map<K, V> result = new LinkedHashMap<K, V>();
-        for (Map.Entry<K, V> entry : list) {
-            result.put(entry.getKey(), entry.getValue());
-        }
-        return result;
-    }
-
-    private static void printMap(Map<String, Integer> password2) {
-        Map<String, Integer> treeMap = new TreeMap<>(password2);
-        Set s = treeMap.entrySet();
-        Iterator it = s.iterator();
-        String password = "";
-        while ( it.hasNext() ) {
-            Map.Entry entry = (Map.Entry) it.next();
-            String value = String.valueOf(entry.getKey());
-            password += value;
-        }
-        System.out.println(password);
     }
 }
