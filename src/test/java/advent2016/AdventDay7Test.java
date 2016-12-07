@@ -2,6 +2,7 @@ package advent2016;
 
 import org.junit.Test;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,8 +27,14 @@ public class AdventDay7Test {
 
     @Test
     public void testSolution1() {
-        AdventDay7.solution();
+        File file = returnFile();
+        AdventDay7.solution(file);
     }
 
+    private File returnFile() {
+        ClassLoader classLoader = getClass().getClassLoader();
+        File file = new File(classLoader.getResource("Day7.txt").getFile());
+        return file;
+    }
 
 }
