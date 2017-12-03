@@ -3,8 +3,7 @@ package advent2017;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class AdventDay3Test {
 
@@ -34,5 +33,96 @@ public class AdventDay3Test {
         Integer distanceTo1 = Math.abs(input - (rowEnd - (noInRow / 2))) + spiral.size() - 1;
         System.out.println("Distance to 1: " + distanceTo1);
         Assert.assertEquals(438, distanceTo1.intValue());
+    }
+
+    private Map<String, Integer> values = new HashMap<>();
+    private List<String> coordinates = new ArrayList<>();
+
+    @Test
+    public void testPart2() {
+        coordinates.add("0,0");
+        values.put("0,0", 1);
+        for (int ring = 1; ; ring++) {
+            int noInRing = (8 * ring);
+            int noInRow = noInRing / 4;
+            List<String> coords = Arrays.asList(coordinates.get(coordinates.size() - 1).split(","));
+            int x = Integer.valueOf(coords.get(0)) + 1;
+            int y = Integer.valueOf(coords.get(1));
+            calculateValue(x, y);
+            for (int j = 0; j < noInRow - 1; j++) {
+                coords = Arrays.asList(coordinates.get(coordinates.size() - 1).split(","));
+                x = Integer.valueOf(coords.get(0));
+                y = Integer.valueOf(coords.get(1)) + 1;
+                calculateValue(x, y);
+            }
+            for (int j = 0; j < noInRow; j++) {
+                coords = Arrays.asList(coordinates.get(coordinates.size() - 1).split(","));
+                x = Integer.valueOf(coords.get(0)) - 1;
+                y = Integer.valueOf(coords.get(1));
+                calculateValue(x, y);
+            }
+            for (int j = 0; j < noInRow; j++) {
+                coords = Arrays.asList(coordinates.get(coordinates.size() - 1).split(","));
+                x = Integer.valueOf(coords.get(0));
+                y = Integer.valueOf(coords.get(1)) - 1;
+                calculateValue(x, y);
+            }
+            for (int j = 0; j < noInRow; j++) {
+                coords = Arrays.asList(coordinates.get(coordinates.size() - 1).split(","));
+                x = Integer.valueOf(coords.get(0)) + 1;
+                y = Integer.valueOf(coords.get(1));
+                calculateValue(x, y);
+            }
+        }
+    }
+
+    private void calculateValue(int x, int y) {
+        Integer sumValue = 0;
+        //north
+        int nx = x;
+        int ny = y + 1;
+        sumValue = sumValue + findValue(nx, ny);
+        //nw
+        int nwx = x - 1;
+        int nwy = y + 1;
+        sumValue = sumValue + findValue(nwx, nwy);
+        //w
+        int wx = x - 1;
+        int wy = y;
+        sumValue = sumValue + findValue(wx, wy);
+        //sw
+        int swx = x - 1;
+        int swy = y - 1;
+        sumValue = sumValue + findValue(swx, swy);
+        //s
+        int sx = x;
+        int sy = y - 1;
+        sumValue = sumValue + findValue(sx, sy);
+        //se
+        int sex = x + 1;
+        int sey = y - 1;
+        sumValue = sumValue + findValue(sex, sey);
+        //e
+        int ex = x + 1;
+        int ey = y;
+        sumValue = sumValue + findValue(ex, ey);
+        //ne
+        int nex = x + 1;
+        int ney = y + 1;
+        sumValue = sumValue + findValue(nex, ney);
+        values.put(x + "," + y, sumValue);
+        coordinates.add(x + "," + y);
+        if (sumValue>input) {
+            System.out.println(sumValue);
+        }
+    }
+
+    private int findValue(int x, int y) {
+        String coord = x + "," + y;
+        Integer nv = values.get(coord);
+        if (nv == null) {
+            nv = 0;
+        }
+        return nv;
     }
 }
