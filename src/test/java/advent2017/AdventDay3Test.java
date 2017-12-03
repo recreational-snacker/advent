@@ -37,6 +37,7 @@ public class AdventDay3Test {
 
     private Map<String, Integer> values = new HashMap<>();
     private List<String> coordinates = new ArrayList<>();
+    Integer value = 0;
 
     @Test
     public void testPart2() {
@@ -73,7 +74,12 @@ public class AdventDay3Test {
                 y = Integer.valueOf(coords.get(1));
                 calculateValue(x, y);
             }
+            if (value!=0) {
+                break;
+            }
         }
+        System.out.println(value);
+        Assert.assertEquals(266330, value.intValue());
     }
 
     private void calculateValue(int x, int y) {
@@ -112,8 +118,8 @@ public class AdventDay3Test {
         sumValue = sumValue + findValue(nex, ney);
         values.put(x + "," + y, sumValue);
         coordinates.add(x + "," + y);
-        if (sumValue>input) {
-            System.out.println(sumValue);
+        if (value==0 && sumValue>input) {
+            value = sumValue;
         }
     }
 
