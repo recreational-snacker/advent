@@ -44,42 +44,36 @@ public class AdventDay3Test {
         coordinates.add("0,0");
         values.put("0,0", 1);
         for (int ring = 1; ; ring++) {
-            int noInRing = (8 * ring);
-            int noInRow = noInRing / 4;
-            List<String> coords = Arrays.asList(coordinates.get(coordinates.size() - 1).split(","));
-            int x = Integer.valueOf(coords.get(0)) + 1;
-            int y = Integer.valueOf(coords.get(1));
-            calculateValue(x, y);
+            int noInRow = (8 * ring) / 4;
+            processCoords(1, 0);
             for (int j = 0; j < noInRow - 1; j++) {
-                coords = Arrays.asList(coordinates.get(coordinates.size() - 1).split(","));
-                x = Integer.valueOf(coords.get(0));
-                y = Integer.valueOf(coords.get(1)) + 1;
-                calculateValue(x, y);
+                processCoords(0, 1);
             }
             for (int j = 0; j < noInRow; j++) {
-                coords = Arrays.asList(coordinates.get(coordinates.size() - 1).split(","));
-                x = Integer.valueOf(coords.get(0)) - 1;
-                y = Integer.valueOf(coords.get(1));
-                calculateValue(x, y);
+                processCoords(-1, 0);
             }
             for (int j = 0; j < noInRow; j++) {
-                coords = Arrays.asList(coordinates.get(coordinates.size() - 1).split(","));
-                x = Integer.valueOf(coords.get(0));
-                y = Integer.valueOf(coords.get(1)) - 1;
-                calculateValue(x, y);
+                processCoords(0, -1);
             }
             for (int j = 0; j < noInRow; j++) {
-                coords = Arrays.asList(coordinates.get(coordinates.size() - 1).split(","));
-                x = Integer.valueOf(coords.get(0)) + 1;
-                y = Integer.valueOf(coords.get(1));
-                calculateValue(x, y);
+                processCoords(1, 0);
             }
-            if (value!=0) {
+            if (value != 0) {
                 break;
             }
         }
         System.out.println(value);
         Assert.assertEquals(266330, value.intValue());
+    }
+
+    private void processCoords(int dx, int dy) {
+        List<String> coords;
+        int x;
+        int y;
+        coords = Arrays.asList(coordinates.get(coordinates.size() - 1).split(","));
+        x = Integer.valueOf(coords.get(0)) + dx;
+        y = Integer.valueOf(coords.get(1)) + dy;
+        calculateValue(x, y);
     }
 
     private void calculateValue(int x, int y) {
@@ -118,7 +112,7 @@ public class AdventDay3Test {
         sumValue = sumValue + findValue(nex, ney);
         values.put(x + "," + y, sumValue);
         coordinates.add(x + "," + y);
-        if (value==0 && sumValue>input) {
+        if (value == 0 && sumValue > input) {
             value = sumValue;
         }
     }
