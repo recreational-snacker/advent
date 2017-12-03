@@ -34,4 +34,19 @@ public class AdventDay1Test {
         }
         System.out.println("Final Sum: " + sum);
     }
+
+    @Test
+    public void testPart2() {
+        List<String> list = new ArrayList<>(Arrays.asList(input.split("")));
+        int midIndex = list.size()/2;
+        System.out.println("mid index: "+midIndex);
+        Integer sum = 0;
+        for (int i = 0; i < list.size(); i++) {
+            Integer current = Integer.valueOf(list.get(i));
+            if (i < midIndex && current == Integer.valueOf(list.get(i + midIndex))) {
+                sum = sum + (2*current);
+            }
+        }
+        System.out.println("Sum is: "+sum);
+    }
 }
