@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>za.co.deesha</groupId>
-    <artifactId>Advent2016</artifactId>
+    <artifactId>AdventOfCode</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <properties>
