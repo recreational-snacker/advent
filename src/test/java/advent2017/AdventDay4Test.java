@@ -4,7 +4,7 @@ import org.junit.Test;
 
 import java.util.*;
 
-public class AdventDay4 {
+public class AdventDay4Test {
 
     String input = "vxjtwn vjnxtw sxibvv mmws wjvtxn icawnd rprh\n" +
             "fhaa qwy vqbq gsswej lxr yzl wakcige mwjrl\n" +
