@@ -1,5 +1,6 @@
 package advent2017;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.*;
@@ -18,6 +19,7 @@ public class AdventDay6Test {
         }
         Map<String, Integer> count = new HashMap<>();
         int blockCount = 0;
+        int noOfLoops = 0;
         for (int i = 0;;i++) {
             Integer max = Collections.max(intArray);
             int indexOfMax = intArray.indexOf(max);
@@ -40,13 +42,15 @@ public class AdventDay6Test {
                     .collect(Collectors.joining(""));
             blockCount++;
             if (count.containsKey(listString)) {
-                System.out.println(blockCount);
-                System.out.println(blockCount-count.get(listString));
+                System.out.println("Cycle count: "+blockCount);
+                noOfLoops = blockCount-count.get(listString);
+                System.out.println("Number of loops: "+noOfLoops);
                 break;
             }
             count.put(listString, blockCount);
         }
-
+        Assert.assertEquals(3156, blockCount);
+        Assert.assertEquals(1610, noOfLoops);
     }
 
 }
