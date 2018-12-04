@@ -1388,6 +1388,7 @@ public class Advent2018Day3Test {
     @Test
     public void testPart1() {
         Map<String, String> fabric = new HashMap<>();
+        Map<String, String> ids = new HashMap<>();
         String[] inputArray = input.split("\\n");
         for (String s : inputArray) {
             String[] details = s.split(" ");
@@ -1404,10 +1405,15 @@ public class Advent2018Day3Test {
                     String coords = xCoord + "," + yCoord;
                     if (fabric.containsKey(coords)) {
                         if (!fabric.get(coords).equals(id)) {
+                            ids.put(id, "X");
+                            ids.put(fabric.get(coords), "X");
                             fabric.put(coords, "X");
                         }
                     } else {
                         fabric.put(coords, id);
+                        if (!ids.containsKey(id)) {
+                            ids.put(id, "");
+                        }
                     }
                 }
             }
@@ -1419,10 +1425,10 @@ public class Advent2018Day3Test {
             }
         }
         System.out.println("Count: " + count);
-
-        for (Map.Entry<String, String> entry : fabric.entrySet()) {
-            System.out.println(entry.getKey() + " " + entry.getValue());
-        }
-
+        ids.forEach((k, v) -> {
+            if (!"X".equals(v)) {
+                System.out.println("Clear section: " + k);
+            }
+        });
     }
 }
