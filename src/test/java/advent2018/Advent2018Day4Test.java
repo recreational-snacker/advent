@@ -1,5 +1,12 @@
 package advent2018;
 
+import org.junit.Test;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.ResolverStyle;
+import java.util.*;
+
 public class Advent2018Day4Test {
 
     private String input = "[1518-08-21 00:39] wakes up\n" +
@@ -1150,5 +1157,152 @@ public class Advent2018Day4Test {
             "[1518-11-05 00:45] falls asleep\n" +
             "[1518-11-05 00:55] wakes up";
 
+    @Test
+    public void testPart1() {
+        String[] inputArray = input.split("\n");
+        Map<LocalDateTime, String> orderedByDate = new HashMap<>();
+        for (String s : inputArray) {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm", Locale.US).withResolverStyle(ResolverStyle.SMART);
+            String dateString = s.substring(1, 17);
+            LocalDateTime date = LocalDateTime.parse(dateString, formatter);
+            orderedByDate.put(date, s.split("] ")[1]);
+        }
+        Map<LocalDateTime, String> treeMap = new TreeMap<>(orderedByDate);
+        findSleepiestGuard(treeMap);
+    }
 
+
+    public void findSleepiestGuard(Map<LocalDateTime, String> treemap) {
+        Map<String, Integer> sleepPatterns = new HashMap<>();
+        int countMinutesAsleep = 0;
+        int startSleepTime = 0;
+        int wakeUpTime = 0;
+        String id = null;
+        List<GuardPattern> guardPatterns = new ArrayList<>();
+        for (Map.Entry<LocalDateTime, String> entry : treemap.entrySet()) {
+            if (entry.getValue().contains("Guard")) {
+                id = entry.getValue().split(" ")[1];
+                countMinutesAsleep = 0;
+                startSleepTime = 0;
+                wakeUpTime = 0;
+            }
+            if (entry.getValue().contains("falls asleep")) {
+                startSleepTime = entry.getKey().getMinute();
+            }
+            if (entry.getValue().contains("wakes up")) {
+                wakeUpTime = entry.getKey().getMinute();
+            }
+            if (startSleepTime != 0 && wakeUpTime != 0) {
+                countMinutesAsleep = (wakeUpTime - startSleepTime);
+                if (sleepPatterns.containsKey(id)) {
+                    countMinutesAsleep += sleepPatterns.get(id);
+                }
+                sleepPatterns.put(id, countMinutesAsleep);
+                GuardPattern guard = new GuardPattern(id, entry.getKey(), startSleepTime, wakeUpTime);
+                guardPatterns.add(guard);
+                startSleepTime = 0;
+                wakeUpTime = 0;
+            }
+        }
+        String chosenGuardId = null;
+        Integer mostHoursAsleep = 0;
+        for (Map.Entry<String, Integer> entry : sleepPatterns.entrySet()) {
+            if (entry.getValue() > mostHoursAsleep) {
+                mostHoursAsleep = entry.getValue();
+                chosenGuardId = entry.getKey();
+            }
+        }
+        System.out.println("Chosen guard: " + chosenGuardId);
+
+        Map<String, Integer> timesAsleep = new HashMap<>();
+        Map<String, Integer> guardMins = new HashMap<>();
+        for (GuardPattern guard : guardPatterns) {
+            if (guard.getId().equals(chosenGuardId)) {
+                for (int i = guard.getStartSleep(); i <= guard.getWakeTime(); i++) {
+                    String time = guard.getDate().getHour() + ":" + i;
+                    if (timesAsleep.containsKey(time)) {
+                        timesAsleep.put(time, timesAsleep.get(time) + 1);
+                    } else {
+                        timesAsleep.put(time, 1);
+                    }
+                }
+            }
+            for (int j = guard.getStartSleep(); j < guard.getWakeTime(); j++) {
+                String time = guard.getId() + ":" + j;
+                if (guardMins.containsKey(time)) {
+                    guardMins.put(time, guardMins.get(time) + 1);
+                } else {
+                    guardMins.put(time, 1);
+                }
+            }
+        }
+
+        Integer mostTimes = 0;
+        String time = null;
+        for (Map.Entry<String, Integer> entry : timesAsleep.entrySet()) {
+            if (entry.getValue() > mostTimes) {
+                mostTimes = entry.getValue();
+                time = entry.getKey();
+            }
+        }
+        System.out.println("Minute most asleep: " + time + " " + mostTimes);
+
+        Integer mostTimesInMin = 0;
+        String guardAndMin = null;
+        for (Map.Entry<String, Integer> entry : guardMins.entrySet()) {
+            if (entry.getValue() > mostTimesInMin) {
+                mostTimesInMin = entry.getValue();
+                guardAndMin = entry.getKey();
+            }
+        }
+        System.out.println("Guard most asleep in a minute: " + guardAndMin + " " + mostTimesInMin);
+    }
+
+
+    private class GuardPattern {
+
+        String id;
+        LocalDateTime date;
+        int startSleep;
+        int wakeTime;
+
+        public GuardPattern(String id, LocalDateTime key, int startSleepTime, int wakeUpTime) {
+            this.id = id;
+            this.date = key;
+            this.startSleep = startSleepTime;
+            this.wakeTime = wakeUpTime;
+        }
+
+        public String getId() {
+            return id;
+        }
+
+        public void setId(String id) {
+            this.id = id;
+        }
+
+        public LocalDateTime getDate() {
+            return date;
+        }
+
+        public void setDate(LocalDateTime date) {
+            this.date = date;
+        }
+
+        public int getStartSleep() {
+            return startSleep;
+        }
+
+        public void setStartSleep(int startSleep) {
+            this.startSleep = startSleep;
+        }
+
+        public int getWakeTime() {
+            return wakeTime;
+        }
+
+        public void setWakeTime(int wakeTime) {
+            this.wakeTime = wakeTime;
+        }
+    }
 }
