@@ -1162,7 +1162,7 @@ public class Advent2018Day4Test {
         String[] inputArray = input.split("\n");
         Map<LocalDateTime, String> orderedByDate = new HashMap<>();
         for (String s : inputArray) {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm", Locale.US).withResolverStyle(ResolverStyle.SMART);
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm").withResolverStyle(ResolverStyle.SMART);
             String dateString = s.substring(1, 17);
             LocalDateTime date = LocalDateTime.parse(dateString, formatter);
             orderedByDate.put(date, s.split("] ")[1]);
