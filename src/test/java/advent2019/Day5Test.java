@@ -24,7 +24,7 @@ public class Day5Test {
         Integer[] intArray = convertToArray(input);
         Integer inputId = 5;
         Integer output = calculate(true, inputId, intArray);
-//        assertEquals(4511442, output.intValue());
+        assertEquals(12648139, output.intValue());
     }
 
     private Integer[] convertToArray(String testInput1) {
