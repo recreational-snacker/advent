@@ -40,7 +40,7 @@ public class Day2Test {
         Integer[] intArray = convertToArray(input);
         intArray[1] = 12;
         intArray[2] = 2;
-        calculate(intArray);
+        System.out.println(calculate(intArray));
     }
 
     private Integer calculate(Integer[] intArray) {
