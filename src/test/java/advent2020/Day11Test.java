@@ -2,7 +2,9 @@ package advent2020;
 
 import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -31,12 +33,12 @@ public class Day11Test {
         return seats;
     }
 
-    private int sol(String input, int occ, boolean prob1) {
+    private int sol(String input, int occ) {
         Map<String, SeatState> seats = splitInputIntoMap(input);
         Map<String, SeatState> currentSeats = splitInputIntoMap(input);
         boolean changes = true;
         while (changes) {
-            changes = processSeatMap(prob1, occ, input, seats, currentSeats);
+            changes = processSeatMap(occ, input, seats, currentSeats);
             seats = new HashMap<>(currentSeats);
         }
         return countSeats(SeatState.OCCUPIED, seats);
@@ -52,18 +54,15 @@ public class Day11Test {
         return seatCount.get();
     }
 
-    private boolean processSeatMap(boolean prob1, int occ, String input, Map<String, SeatState> seats, Map<String, SeatState> currentSeats) {
+    private boolean processSeatMap(int occ, String input, Map<String, SeatState> seats, Map<String, SeatState> currentSeats) {
         boolean changes = false;
         for (int row = 0; row < findRowLength(input); row++) {
             for (int col = 0; col < findColLength(input); col++) {
                 String currentSeat = row+","+col;
                 SeatState currentSeatState = seats.get(currentSeat);
                 if (currentSeatState.equals(SeatState.FLOOR)) {
-                    if (prob1) {
-                        continue;
-                    } else {
+                    continue;
 
-                    }
                 }
                 if (currentSeatState.equals(SeatState.UNOCCUPIED)) {
                     if (surroundingSeatsAreUnoccupied(row, col, seats, currentSeat)) {
@@ -129,9 +128,161 @@ public class Day11Test {
         return valid;
     }
 
+    private int sol2(String input, int occ) {
+        Map<String, SeatState> seats = splitInputIntoMap(input);
+        Map<String, SeatState> currentSeats = splitInputIntoMap(input);
+        boolean changes = true;
+        int count = 1;
+        while (changes) {
+            System.out.println("Count: "+count);
+            changes = processSeatMap2(occ, input, seats, currentSeats);
+            seats = new HashMap<>(currentSeats);
+            count++;
+        }
+        return countSeats(SeatState.OCCUPIED, seats);
+    }
+
+    private boolean processSeatMap2(int occ, String input, Map<String, SeatState> seats, Map<String, SeatState> currentSeats) {
+        boolean changes = false;
+
+        for (int row = 0; row < findRowLength(input); row++) {
+            for (int col = 0; col < findColLength(input); col++) {
+                String currentSeat = row+","+col;
+                SeatState currentSeatState = seats.get(currentSeat);
+                if (currentSeatState.equals(SeatState.FLOOR)) {
+                    continue;
+                }
+                if (currentSeatState.equals(SeatState.UNOCCUPIED)) {
+                    List<Boolean> check = surroundingSeatsState(row, col, seats, findRowLength(input), findColLength(input), SeatState.UNOCCUPIED);
+                    if (!check.contains(false)) {
+                        currentSeats.put(currentSeat, SeatState.OCCUPIED);
+                        changes = true;
+                    }
+                }
+                if (currentSeatState.equals(SeatState.OCCUPIED)) {
+                    List<Boolean> check = surroundingSeatsState(row, col, seats, findRowLength(input), findColLength(input), SeatState.OCCUPIED);
+                    if (countUnoccupiedChairs(check, occ)) {
+                        currentSeats.put(currentSeat, SeatState.UNOCCUPIED);
+                        changes = true;
+                    }
+                }
+            }
+        }
+        return changes;
+    }
+
+    private Boolean countUnoccupiedChairs(List<Boolean> check, int occ) {
+        if (check.size()<occ) {
+            return false;
+        }
+        if (check.size() == occ && !check.contains(false)) {
+            return true;
+        }
+        if (check.size()>occ) {
+            int countTrue = 0;
+            for (Boolean b : check) {
+                if (b) {
+                    countTrue++;
+                }
+            }
+            return countTrue >= occ;
+        }
+        return false;
+    }
+
+    private List<Boolean> surroundingSeatsState(int row, int col, Map<String, SeatState> seats, int rowLength, int colLength, SeatState seatState) {
+        List<Boolean> validUnoccupied = new ArrayList<>();
+        for (int i = col+1; i < colLength; i++) {
+            String key = row + "," + i;
+            if (checkSeat(seats, validUnoccupied, key, seatState) != null) {
+                break;
+            }
+        }
+        for (int i = col-1; i >= 0; i--) {
+            String key = row + "," + i;
+            if (checkSeat(seats, validUnoccupied, key, seatState) != null) {
+                break;
+            }
+        }
+        for (int i = row+1; i < rowLength; i++) {
+            String key = i + "," + col;
+            if (checkSeat(seats, validUnoccupied, key, seatState) != null) {
+                break;
+            }
+        }
+        for (int i = row-1; i >= 0; i--) {
+            String key = i + "," + col;
+            if (checkSeat(seats, validUnoccupied, key, seatState) != null) {
+                break;
+            }
+        }
+        boolean check = true;
+        int count = 1;
+        while (check) {
+            int diagRow = row + count;
+            int diagCol = col + count;
+            String key = diagRow + "," + diagCol;
+            if (checkSeat(seats, validUnoccupied, key, seatState) != null) {
+                check = false;
+            }
+            count++;
+        }
+        check = true;
+        count = 1;
+        while (check) {
+            int diagRow = row - count;
+            int diagCol = col + count;
+            String key = diagRow + "," + diagCol;
+            if (checkSeat(seats, validUnoccupied, key, seatState) != null) {
+                check = false;
+            }
+            count++;
+        }
+        check = true;
+        count = 1;
+        while (check) {
+            int diagRow = row - count;
+            int diagCol = col - count;
+            String key = diagRow + "," + diagCol;
+            if (checkSeat(seats, validUnoccupied, key, seatState) != null) {
+                check = false;
+            }
+            count++;
+        }
+        check = true;
+        count = 1;
+        while (check) {
+            int diagRow = row + count;
+            int diagCol = col - count;
+            String key = diagRow + "," + diagCol;
+            if (checkSeat(seats, validUnoccupied, key, seatState) != null) {
+                check = false;
+            }
+            count++;
+        }
+        return validUnoccupied;
+    }
+
+    private Boolean checkSeat(Map<String, SeatState> seats, List<Boolean> validStates, String key, SeatState seatState) {
+        if (seats.containsKey(key)) {
+            SeatState ss = seats.get(key);
+            if (ss.equals(SeatState.FLOOR)) {
+                return null;
+            }
+            if (ss.equals(seatState)) {
+                validStates.add(true);
+                return true;
+            } else {
+                validStates.add(false);
+                return false;
+            }
+        }
+        return false;
+    }
+
     @Test
     public void test() {
-        System.out.println(sol(sample, 5, false));
+        System.out.println(sol2(input, 5));
     }
 
     private enum SeatState {
