@@ -107,7 +107,66 @@ public class Day7Test {
 
     private void countBagsInGold(String input, String bagColour) {
         List<Bag> bags = splitIntoBags(input);
+        List<Bag> bagsInGold = new ArrayList<>();
+        System.out.println(bags.size());
+        boolean cont = true;
+        List<String> coloursInGold = new ArrayList<>();
+        coloursInGold.add(bagColour);
 
+        Integer bagCount = 0;
+
+        while (coloursInGold.size()>0) {
+            List<String> currentColoursInGold = new ArrayList<>(coloursInGold);
+            for (String lookForColour : currentColoursInGold) {
+                coloursInGold.remove(lookForColour);
+                for (Bag bag : bags) {
+                    if (bag.getBag().getColour().equalsIgnoreCase(lookForColour)) {
+                        for (Map.Entry<Integer, Luggage> entry : bag.getBagsInside().entrySet()) {
+                            Integer k = entry.getKey();
+                            Luggage v = entry.getValue();
+
+                            if (!coloursInGold.contains(v.getColour())) {
+                                coloursInGold.add(v.getColour());
+                            }
+
+                            if (containsColour(bagsInGold, lookForColour)) {
+                                for (Bag bag1 : bagsInGold) {
+                                    if (bag1.getBag().getColour().equalsIgnoreCase(lookForColour)) {
+                                        bag1.getBagsInside().put(k, v);
+                                    }
+                                }
+                            } else {
+                                Bag b = new Bag();
+                                b.setBag(v);
+                                b.setCount(k);
+                                bagsInGold.add(b);
+                            }
+
+
+                        }
+                        break;
+                    }
+                }
+            }
+        }
+        System.out.println();
+        Integer total = 0;
+        List<Bag> currentBagList = new ArrayList<>(bagsInGold);
+        for (int i = 0; i < currentBagList.size(); i++) {
+            
+
+
+
+        }
+    }
+
+    private boolean containsColour(List<Bag> bagsInGold, String lookForColour) {
+        for (Bag bag : bagsInGold) {
+            if (bag.getBag().getColour().equalsIgnoreCase(lookForColour)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Test
@@ -118,8 +177,17 @@ public class Day7Test {
     }
 
     private class Bag {
+        private Integer count;
         private Luggage bag;
         private Map<Integer, Luggage> bagsInside = new HashMap<>();
+
+        public Integer getCount() {
+            return count;
+        }
+
+        public void setCount(Integer count) {
+            this.count = count;
+        }
 
         public Luggage getBag() {
             return bag;
