@@ -2,7 +2,6 @@ package advent2021;
 
 import org.junit.Test;
 
-import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
